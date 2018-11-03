@@ -1,0 +1,63 @@
+## Cadastrando compras ##
+
+adicionaCompra cpf=19418510068 fornecedor="Seu Olavo" data="03/12/2013" nomeProduto="Coxao com batata" descricaoProduto="Coxao de frango com batata frita"
+adicionaCompra cpf=19418510068 fornecedor="Marcos" data="03/06/2017" nomeProduto="Batata frita" descricaoProduto="Porcao de batata frita"
+adicionaCompra cpf=64269141198 fornecedor="Marcos" data="01/11/2016" nomeProduto="Batata frita" descricaoProduto="Porcao de batata frita"
+adicionaCompra cpf=64269141198 fornecedor="Seu Olavo" data="02/04/2015" nomeProduto="Coca-cola" descricaoProduto="Coca-coca (lata)"
+adicionaCompra cpf=58217738123 fornecedor="Dona Alba" data="11/11/2011" nomeProduto="Rubacao" descricaoProduto="Feijao com arroz e quejo coalho" 
+adicionaCompra cpf=58217738123 fornecedor="Marcos" data="07/04/1998" nomeProduto="Coxao de pizza" descricaoProduto="Coxao de frango com presunto e queijo" 
+adicionaCompra cpf=64269141198 fornecedor="Marcos" data="01/11/2016" nomeProduto="Coxao de frango" descricaoProduto="Coxao de frango com cheddar"
+adicionaCompra cpf=58217738123 fornecedor="Marcos" data="11/12/1998" nomeProduto="Batata frita" descricaoProduto="Porcao de batata frita"
+
+expectError "Erro ao cadastrar compra: cpf invalido." adicionaCompra cpf=142144 fornecedor="Seu Olavo" data="04/02/1999" nomeProduto="Coxao com batata" descricaoProduto="Coxao com batata frita"
+expectError "Erro ao cadastrar compra: cliente nao existe." adicionaCompra cpf=58217738498 fornecedor="Seu Olavo" data="04/02/1999" nomeProduto="Coxao com batata" descricaoProduto="Coxao com batata frita"
+expectError "Erro ao cadastrar compra: fornecedor nao existe." adicionaCompra cpf=58217738123 fornecedor="Helhao" data="03/02/2002" nomeProduto="Batata frita" descricaoProduto="Porcao de batata frita"
+expectError "Erro ao cadastrar compra: fornecedor nao pode ser vazio ou nulo." adicionaCompra cpf=64269141198 fornecedor="" data="07/07/2007" nomeProduto"Coca-coca" descricaoProduto="Coca-cola (lata)"
+expectError "Erro ao cadastrar compra: data invalida." adicionaCompra cpf=19418510068 fornecedor="Marcos" data="04/103/2018" nomeProduto="Rubacao" descricaoProduto="Feijao com arroz e queijo coalho"
+expectError "Erro ao cadastrar compra: data nao pode ser vazia ou nula." adicionaCompra cpf=58217738123 fornecedor="" data="" nomeProduto="Coxao com batata" descricaoProduto="Coxao de frango com batata frita"
+expectError "Erro ao cadastrar compra: nome do produto nao pode ser vazio ou nulo." adicionaCompra cpf=64269141198 fornecedor="Marcos" data="04/05/2008" nome_pro="" descricaoProduto="Porcao de batata frita"
+expectError "Erro ao cadastrar compra: produto nao existe." adicionaCompra cpf=19418510068 fornecedor="Seu Olavo" data="12/12/2004" nomeProduto="Batata frita" descricaoProduto="Porcao de batata frita"
+expectError "Erro ao cadastrar compra: descricao do produto nao pode ser vazia ou nula" adicionaCompra cpf=58217738123 fornecedor="Dona Alba" data="28/06/2007" nomeProduto="Rubacao" descricaoProduto=""
+expectError "Erro ao cadastrar compra: produto nao existe." adicionaCompra cpf=64269141198 fornecedor="Seu Olavo" data="22/11/2009" nomeProduto="Coca-cola" descricaoProduto="Coca-cola (garrafa)"
+
+
+## Totalizando conta de um fornecedor ##
+
+expect 6.50 cpf=64269141198 fornecedor="Marcos" getDebito
+expect 3.00 cpf=64269141198 fornecedor="Seu Olavo" getDebito
+expect 14.00 cpf=58217738123 fornecedor="Dona Alba" getDebito
+expect 6.50 cpf=58217738123 fornecedor="Marcos" getDebito
+
+
+expectError "Erro ao recuperar debito: cliente nao existe." getDebito cpf=12345678919 fornecedor"Marcos"
+expectError "Erro ao recuperar debito: cpf invalido." getDebito cpf=98142 fornecedor="Marcos"
+expectError "Erro ao recuperar debito: fornecedor nao pode ser vazio ou nulo." getDebito cpf=64269141198 fornecedor=""
+expectError "Erro ao recuperar debito: fornecedor nao existe." getDebito cpf=19418510068 fornecedor"Frango Feliz"
+expectError "Erro ao recuperar debito: cliente nao tem debito com fornecedor." cpf=19418510068 fornecedor"Dona Alba"
+
+## Exibindo conta cliente ##
+
+expect "Cliente: Amigao Fernandes | Seu Olavo | Coxao com batata - 03-12-2013" exibeContas cpf=19418510068 fornecedor="Seu Olavo" 
+expect "Cliente: Ana Amari | Marcos | Batata frita - 01-11-2016 | Coxao de Frango - 01-11-2016" exibeContas cpf=64269141198 fornecedor="Seu Olavo"
+expect "Cliente: Lucio Correia | Marcos | Coxao de pizza - 07-04-1998" exibeContas cpf=58217738123 fornecedor="Marcos"
+expect "Cliente: Ana Amari | Seu Olavo | Coca-cola - 02-04-2015" exibeContas cpf=64269141198 fornecedor="Seu Olavo"
+
+expectError "Erro ao exibir conta do cliente: cpf invalido." exibeContas cpf=19274 fornecedor="Seu Olavo"
+expectError "Erro ao exibir conta do cliente: cliente nao existe." exibeContas cpf=84969141198 fornecedor="Seu Olavo"
+expectError "Erro ao exibir conta do cliente: fornecedor nao pode ser vazio ou nulo." exibeContas cpf=58217738123 fornecedor=""
+expectError "Erro ao exibir conta do cliente: fornecedor nao existe." exibeContas cpf=64269141198 fornecedor="Anel universitario"
+expectError "Erro ao exibir conta do cliente: cliente nao tem nenhuma conta com o fornecedor." exibeContas cpf=19418510068 fornecedor="Dona Alba"
+
+## Exibindo contas clientes ##
+
+expect "Cliente: Lucio Correia | Dona Alba | Rubacao - 01-11-2011 | Marcos | Coxao de pizza - 07-04-1998" exibeContasCliente cpf=58217738123
+expect "Cliente: Ana Amari | Marcos | Batata frita - 01-11-2016 | Coxao de frango - 01-11-2016 | Seu Olavo | Coca-cola - 02-04-2015" exibeContasClientes cpf=64269141198
+expect "Cliente: Amigao Fernandes | Seu Olavo | Coxao com batata - 03-12-2013 | Marcos | Batata frita - 01-11-2016" exibeContasClientes cpf=19418510068
+
+expectError "Erro ao exibir contas do cliente: cpf invalido." exibeContas cpf=102487
+expectError "Erro ao exibir contas do cliente: cliente nao existe." cpf =12345678912
+
+adicionaCliente cpf=84591243910 nome="Joao McCree" email="joao_mccree@ccc.ufcg.edu.br" localizacao="SPG"
+
+expectError "Erro ao exibir contas do cliente: cliente nao tem nenhuma conta." cpf=84591243910
+
